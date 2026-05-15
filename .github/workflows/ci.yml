@@ -1,0 +1,40 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    name: Build and Verify
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Run Lint
+        run: npm run lint
+
+      # Estructura lista para Tests (Descomentar cuando haya pruebas)
+      # - name: Run Tests
+      #   run: npm test
+
+      # Estructura lista para Build (Descomentar si es necesario compilar)
+      # - name: Build Project
+      #   run: npm run build
